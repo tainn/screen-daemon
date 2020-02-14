@@ -2,8 +2,8 @@
 
 import sys
 import os
-import subprocess as sp
 import json
+import subprocess as sp
 from typing import Tuple, List
 
 
@@ -15,12 +15,12 @@ def main() -> None:
     with open('options.json', 'r') as jf:
         options = json.load(jf)
 
-    command, flags = args_parse(args, commands, help_flags, options)
+    command, arguments = args_parse(args, commands, help_flags, options)
 
     if command == 'run':
-        run(options, flags)
+        run(options, arguments)
     else:
-        kill(options, flags)
+        kill(options, arguments)
 
     print('\nCompleted!')
 
@@ -35,15 +35,15 @@ def args_parse(args: list, commands: list, help_flags: set, options: dict) -> Tu
     if args[0] not in commands:
         sys.exit('Command <run/kill> not given')
 
-    command, *flags = args
+    command, *arguments = args
 
-    if not flags:
+    if not arguments:
         sys.exit('No arguments given')
 
-    if len(flags) != len(set(flags).intersection(options)) and 'all' not in flags:
+    if len(arguments) != len(set(arguments).intersection(options)) and 'all' not in arguments:
         sys.exit('One or more invalid arguments given')
 
-    return command, flags
+    return command, arguments
 
 
 def return_help(options: dict) -> None:
@@ -52,21 +52,21 @@ def return_help(options: dict) -> None:
     output += '\nall : (kills all)'
 
     for command, (dc, screen) in options.items():
-        output += f'\n{command} : {screen.split()[2]}'
+        output += f'\n{command} : {screen.split()[0]}'
 
     sys.exit(output)
 
 
-def run(options: dict, flags: List[str]) -> None:
-    for flag in flags:
-        os.chdir(options.get(flag)[0])
-        sp.run(options.get(flag)[1], shell=True)
+def run(options: dict, arguments: List[str]) -> None:
+    for arg in arguments:
+        os.chdir(options.get(arg)[0])
+        sp.run(f'screen -dmS {options.get(arg)[1]}', shell=True)
 
-        pname = options.get(flag)[1].split()[2]
+        pname = options.get(arg)[1].split()[0]
         print(f'Run {pname}')
 
 
-def kill(options: dict, flags: List[str]) -> None:
+def kill(options: dict, arguments: List[str]) -> None:
     ls = sp.check_output(['screen -ls'], shell=True).decode('utf-8')
 
     for line in ls.split('\n')[1:]:
@@ -77,9 +77,9 @@ def kill(options: dict, flags: List[str]) -> None:
         pid = line.split(".")[0]
         pname = line.split(".")[1].split()[0]
 
-        for flag in flags:
+        for arg in arguments:
 
-            if 'all' in flags or pname == options.get(flag)[1].split()[2]:
+            if 'all' in arguments or pname == options.get(arg)[1].split()[0]:
                 sp.run([f'kill {pid}'], shell=True)
                 print(f'Killed {pname}')
 
