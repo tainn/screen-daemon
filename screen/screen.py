@@ -49,7 +49,7 @@ def args_parse(args: list, commands: list, help_flags: set, options: dict) -> Tu
 def return_help(options: dict) -> None:
     output = './screen.py <run/kill> [arguments]\n'
     output += '\nList of arguments:'
-    output += '\nall : (kills all)'
+    output += '\nall : kill-specific, kills all'
 
     for command, (dc, screen) in options.items():
         output += f'\n{command} : {screen.split()[0]}'
