@@ -8,6 +8,8 @@ from typing import Tuple, List
 
 
 def main() -> None:
+    """Sets initial data, retrieves parsed data, as well as runs respective commands"""
+
     args = sys.argv[1:]
     commands = ['run', 'kill']
     help_flags = {'-h', '--help', 'help'}
@@ -26,6 +28,8 @@ def main() -> None:
 
 
 def args_parse(args: list, commands: list, help_flags: set, options: dict) -> Tuple[str, List[str]]:
+    """Checks passed data and retuns the parsed command and arguments"""
+
     if not args or set(args).intersection(help_flags):
         return_help(options)
 
@@ -47,26 +51,32 @@ def args_parse(args: list, commands: list, help_flags: set, options: dict) -> Tu
 
 
 def return_help(options: dict) -> None:
+    """Formats the help output message and displays it"""
+
     output = './screen.py <run/kill> [arguments]\n'
     output += '\nList of arguments:'
-    output += '\nall : kill-specific, kills all'
+    output += '\nall : kills all (kill-specific)'
 
-    for command, (dc, screen) in options.items():
-        output += f'\n{command} : {screen.split()[0]}'
+    for command, (_, _, name) in options.items():
+        output += f'\n{command} : {options.get(command).get(name)}'
 
     sys.exit(output)
 
 
 def run(options: dict, arguments: List[str]) -> None:
-    for arg in arguments:
-        os.chdir(options.get(arg)[0])
-        sp.run(f'screen -dmS {options.get(arg)[1]}', shell=True)
+    """Runs the passed processes"""
 
-        pname = options.get(arg)[1].split()[0]
+    for arg in arguments:
+        os.chdir(options.get(arg).get('cd'))
+        sp.run(f'screen -dmS {options.get(arg).get("execute")}', shell=True)
+
+        pname = options.get(arg).get('name')
         print(f'Run {pname}')
 
 
 def kill(options: dict, arguments: List[str]) -> None:
+    """Kills the passed processes"""
+
     ls = sp.check_output(['screen -ls'], shell=True).decode('utf-8')
 
     for line in ls.split('\n')[1:]:
@@ -79,7 +89,7 @@ def kill(options: dict, arguments: List[str]) -> None:
 
         for arg in arguments:
 
-            if 'all' in arguments or pname == options.get(arg)[1].split()[0]:
+            if 'all' in arguments or pname == options.get(arg).get('name'):
                 sp.run([f'kill {pid}'], shell=True)
                 print(f'Killed {pname}')
 
