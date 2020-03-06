@@ -14,12 +14,12 @@ The `daemons.json` should follow the following form, each entry being a separate
 {
   "command_1": {
     "cd": "/path/to/dir",
-    "execute": "name executable arguments",
+    "execute": "executable arguments",
     "name": "name"
   },
   "command_2": {
     "cd": "/path/to/dir",
-    "execute": "name executable arguments",
+    "execute": "executable arguments",
     "name": "name"
   }
 }

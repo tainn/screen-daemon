@@ -68,7 +68,7 @@ def run(daemons: dict, args: List[str]) -> None:
 
     for arg in args:
         os.chdir(daemons.get(arg).get('cd'))
-        sp.run(f'screen -dmS {daemons.get(arg).get("execute")}', shell=True)
+        sp.run(f'screen -dmS {daemons.get(arg).get("name")} {daemons.get(arg).get("execute")}', shell=True)
 
         pname = daemons.get(arg).get('name')
         print(f'Run {pname}')
