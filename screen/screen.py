@@ -10,71 +10,71 @@ from typing import Tuple, List
 def main() -> None:
     """Sets initial data, retrieves parsed data, as well as runs respective commands"""
 
-    args = sys.argv[1:]
+    raw_args = sys.argv[1:]
     commands = ['run', 'kill']
-    help_flags = {'-h', '--help', 'help'}
+    help_ops = {'-h', '--help', 'help'}
 
-    with open('options.json', 'r') as jf:
-        options = json.load(jf)
+    with open('daemons.json', 'r') as jf:
+        daemons = json.load(jf)
 
-    command, arguments = args_parse(args, commands, help_flags, options)
+    command, args = parse_args(raw_args, commands, help_ops, daemons)
 
     if command == 'run':
-        run(options, arguments)
+        run(daemons, args)
     else:
-        kill(options, arguments)
+        kill(daemons, args)
 
     print('\nCompleted!')
 
 
-def args_parse(args: list, commands: list, help_flags: set, options: dict) -> Tuple[str, List[str]]:
+def parse_args(raw_args: list, commands: list, help_ops: set, daemons: dict) -> Tuple[str, List[str]]:
     """Checks passed data and retuns the parsed command and arguments"""
 
-    if not args or set(args).intersection(help_flags):
-        return_help(options)
+    if not raw_args or set(raw_args).intersection(help_ops):
+        format_help(daemons)
 
-    if len(args) != len(set(args)):
+    if len(raw_args) != len(set(raw_args)):
         sys.exit('Repeated arguments')
 
-    if args[0] not in commands:
+    if raw_args[0] not in commands:
         sys.exit('Command <run/kill> not given')
 
-    command, *arguments = args
+    command, *args = raw_args
 
-    if not arguments:
+    if not args:
         sys.exit('No arguments given')
 
-    if len(arguments) != len(set(arguments).intersection(options)) and 'all' not in arguments:
+    if len(args) != len(set(args).intersection(daemons)) and 'all' not in args:
         sys.exit('One or more invalid arguments given')
 
-    return command, arguments
+    return command, args
 
 
-def return_help(options: dict) -> None:
+def format_help(daemons: dict) -> None:
     """Formats the help output message and displays it"""
 
-    output = './screen.py <run/kill> [arguments]\n'
-    output += '\nList of arguments:'
-    output += '\nall : kills all (kill-specific)'
+    output = './screen.py <run/kill> [arguments]\n' \
+             '\nList of arguments:' \
+             '\nall : kills all (kill-specific)'
 
-    for command, (_, _, name) in options.items():
-        output += f'\n{command} : {options.get(command).get(name)}'
+    for command, (_, _, name) in daemons.items():
+        output += f'\n{command} : {daemons.get(command).get(name)}'
 
     sys.exit(output)
 
 
-def run(options: dict, arguments: List[str]) -> None:
-    """Runs the passed processes"""
+def run(daemons: dict, args: List[str]) -> None:
+    """Runs the passed processes in screen"""
 
-    for arg in arguments:
-        os.chdir(options.get(arg).get('cd'))
-        sp.run(f'screen -dmS {options.get(arg).get("execute")}', shell=True)
+    for arg in args:
+        os.chdir(daemons.get(arg).get('cd'))
+        sp.run(f'screen -dmS {daemons.get(arg).get("execute")}', shell=True)
 
-        pname = options.get(arg).get('name')
+        pname = daemons.get(arg).get('name')
         print(f'Run {pname}')
 
 
-def kill(options: dict, arguments: List[str]) -> None:
+def kill(daemons: dict, args: List[str]) -> None:
     """Kills the passed processes"""
 
     ls = sp.check_output(['screen -ls'], shell=True).decode('utf-8')
@@ -87,9 +87,9 @@ def kill(options: dict, arguments: List[str]) -> None:
         pid = line.split(".")[0]
         pname = line.split(".")[1].split()[0]
 
-        for arg in arguments:
+        for arg in args:
 
-            if 'all' in arguments or pname == options.get(arg).get('name'):
+            if 'all' in args or pname == daemons.get(arg).get('name'):
                 sp.run([f'kill {pid}'], shell=True)
                 print(f'Killed {pname}')
 
