@@ -9,7 +9,7 @@ Utility for simplified running of pre-specified processes as daemons—processes
 - `daemons.json` should be located in the same directory as the executable
 
 ## Form
-The `daemons.json` should follow the following form, each entry being a separate dictionary, where `cd`, `execute` and `name` are required fixed key strings:
+The `daemons.json` should have the following form, each entry being a separate dictionary, where `cd`, `execute` and `name` are required fixed key strings:
 ```json
 {
   "command_1": {
