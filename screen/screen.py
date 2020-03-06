@@ -75,7 +75,7 @@ def run(daemons: dict, args: List[str]) -> None:
 
 
 def kill(daemons: dict, args: List[str]) -> None:
-    """Kills the passed processes"""
+    """Kills the passed screen processes"""
 
     ls = sp.check_output(['screen -ls'], shell=True).decode('utf-8')
 
