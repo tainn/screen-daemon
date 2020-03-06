@@ -53,7 +53,7 @@ def parse_args(raw_args: list, commands: list, help_ops: set, daemons: dict) -> 
 def format_help(daemons: dict) -> None:
     """Formats the help output message and displays it"""
 
-    output = './screen.py <run/kill> [arguments]\n' \
+    output = './screen.py <run/kill> <arguments>\n' \
              '\nList of arguments:' \
              '\nall : kills all (kill-specific)'
 
