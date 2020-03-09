@@ -28,7 +28,7 @@ The keys `command` can be passed as arguments when run from the terminal in orde
 
 ## Run
 ```sh
-cd /path/to/dir
+cd /path/to/screen
 
 chmod +x ./screen.py
 
