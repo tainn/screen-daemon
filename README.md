@@ -2,7 +2,7 @@
 ![Version](https://img.shields.io/badge/version-v1.0-blue)
 ![License](https://img.shields.io/badge/license-GPLv3-orange)
 
-Utility for simplified running of pre-specified processes as daemons—processes detached from the terminal—through the `GNU Screen`.
+Utility for simplified running of pre-specified processes as daemons through the `GNU Screen`.
 
 ## Usage
 - Processes should be specified separately in a local `daemons.json` file
