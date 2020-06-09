@@ -1,5 +1,5 @@
 # screen-daemon
-![Version](https://img.shields.io/badge/version-v1.0-blue)
+![Version](https://img.shields.io/badge/version-v1.1-blue)
 ![License](https://img.shields.io/badge/license-GPLv3-orange)
 
 Utility for simplified running of pre-specified processes as daemons through the `GNU Screen`.
