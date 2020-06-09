@@ -10,13 +10,15 @@ from typing import Tuple, List
 def main() -> None:
     """Sets initial data, retrieves parsed data, as well as runs respective commands"""
 
-    raw_args = sys.argv[1:]
-    commands = ['run', 'kill']
-    help_ops = {'-h', '--help', 'help'}
+    raw_args: list = sys.argv[1:]
+    commands: list = ['run', 'kill']
+    help_ops: set = {'-h', '--help'}
 
     with open('daemons.json', 'r') as jf:
-        daemons = json.load(jf)
+        daemons: dict = json.load(jf)
 
+    command: str
+    args: List[str]
     command, args = parse_args(raw_args, commands, help_ops, daemons)
 
     if command == 'run':
@@ -39,6 +41,8 @@ def parse_args(raw_args: list, commands: list, help_ops: set, daemons: dict) -> 
     if raw_args[0] not in commands:
         sys.exit('Command <run/kill> not given')
 
+    command: str
+    args: List[str]
     command, *args = raw_args
 
     if not args:
@@ -53,9 +57,9 @@ def parse_args(raw_args: list, commands: list, help_ops: set, daemons: dict) -> 
 def format_help(daemons: dict) -> None:
     """Formats the help output message and displays it"""
 
-    output = './screen.py <run/kill> <arguments>\n' \
-             '\nList of arguments:' \
-             '\nall : kills all (kill-specific)'
+    output: str = './screen.py <run/kill> <arguments>\n' \
+                  '\nList of arguments:' \
+                  '\nall : kills all (kill-specific)'
 
     for command, (_, _, name) in daemons.items():
         output += f'\n{command} : {daemons.get(command).get(name)}'
@@ -70,22 +74,22 @@ def run(daemons: dict, args: List[str]) -> None:
         os.chdir(daemons.get(arg).get('cd'))
         sp.run(f'screen -dmS {daemons.get(arg).get("name")} {daemons.get(arg).get("execute")}', shell=True)
 
-        pname = daemons.get(arg).get('name')
+        pname: str = daemons.get(arg).get('name')
         print(f'Run {pname}')
 
 
 def kill(daemons: dict, args: List[str]) -> None:
     """Kills the passed screen processes"""
 
-    ls = sp.check_output(['screen -ls'], shell=True).decode('utf-8')
+    ls: str = sp.check_output(['screen -ls'], shell=True).decode('utf-8')
 
     for line in ls.split('\n')[1:]:
 
         if '/run/' in line:
             break
 
-        pid = line.split(".")[0]
-        pname = line.split(".")[1].split()[0]
+        pid: str = line.split(".")[0]
+        pname: str = line.split(".")[1].split()[0]
 
         for arg in args:
 

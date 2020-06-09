@@ -5,8 +5,7 @@
 Utility for simplified running of pre-specified processes as daemons through the `GNU Screen`.
 
 ## Usage
-- Processes should be specified separately in a local `daemons.json` file
-- `daemons.json` should be located in the same directory as the executable
+Processes should be specified separately in a local `daemons.json` file. `daemons.json` should be located in the same directory as the executable.
 
 ## Form
 The `daemons.json` should have the following form, each entry being a separate dictionary, where `cd`, `execute` and `name` are required fixed key strings:
