@@ -8,8 +8,9 @@ from typing import Tuple, List
 
 
 def main() -> None:
-    """Sets initial data, retrieves parsed data, as well as runs respective commands"""
-
+    """
+    Sets initial data, retrieves parsed data, as well as runs respective commands
+    """
     raw_args: list = sys.argv[1:]
     commands: list = ['run', 'kill']
     help_ops: set = {'-h', '--help'}
@@ -30,8 +31,9 @@ def main() -> None:
 
 
 def parse_args(raw_args: list, commands: list, help_ops: set, daemons: dict) -> Tuple[str, List[str]]:
-    """Checks passed data and retuns the parsed command and arguments"""
-
+    """
+    Checks passed data and retuns the parsed command and arguments
+    """
     if not raw_args or set(raw_args).intersection(help_ops):
         format_help(daemons)
 
@@ -55,8 +57,9 @@ def parse_args(raw_args: list, commands: list, help_ops: set, daemons: dict) -> 
 
 
 def format_help(daemons: dict) -> None:
-    """Formats the help output message and displays it"""
-
+    """
+    Formats the help output message and displays it
+    """
     output: str = './screen.py <run/kill> <arguments>\n' \
                   '\nList of arguments:' \
                   '\nall : kills all (kill-specific)'
@@ -68,8 +71,9 @@ def format_help(daemons: dict) -> None:
 
 
 def run(daemons: dict, args: List[str]) -> None:
-    """Runs the passed processes in screen"""
-
+    """
+    Runs the passed processes in screen
+    """
     for arg in args:
         os.chdir(daemons.get(arg).get('cd'))
         sp.run(f'screen -dmS {daemons.get(arg).get("name")} {daemons.get(arg).get("execute")}', shell=True)
@@ -79,8 +83,9 @@ def run(daemons: dict, args: List[str]) -> None:
 
 
 def kill(daemons: dict, args: List[str]) -> None:
-    """Kills the passed screen processes"""
-
+    """
+    Kills the passed screen processes
+    """
     ls: str = sp.check_output(['screen -ls'], shell=True).decode('utf-8')
 
     for line in ls.split('\n')[1:]:
