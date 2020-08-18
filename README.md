@@ -2,7 +2,7 @@
 Utility for simplified running of pre-specified processes as daemons through the `GNU Screen`.
 
 ## Usage
-Processes should be specified separately in a local `daemons.json` file. The file should be located in the same directory as the executable.
+Processes should be specified separately in a local `daemons.json` file. Said file should be located in the same directory as the executable.
 
 ```sh
 ./screen.py <run/kill> <arguments>
