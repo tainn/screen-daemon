@@ -9,7 +9,7 @@ Processes should be specified separately in a local `daemons.json` file. Said fi
 ```
 
 ## Form
-The `daemons.json` should have the following form, each entry being a separate dictionary, where `cd`, `execute` and `name` are required fixed key strings:
+The `daemons.json` should have the following form, each entry being a separate dictionary, where `cd`, `execute` and `name` are required fixed key strings
 ```json
 {
   "command_1": {
