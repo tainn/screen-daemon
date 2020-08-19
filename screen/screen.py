@@ -15,7 +15,7 @@ def main() -> None:
     commands: list = ['run', 'kill']
     help_ops: set = {'-h', '--help'}
 
-    with open('daemons.json', 'r') as jf:
+    with open('../data/daemons.json', 'r') as jf:
         daemons: dict = json.load(jf)
 
     command: str
